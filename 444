@@ -1,0 +1,26 @@
+-- Function to handle the keybind
+local function ToggleBB()
+    bb.Enabled = not bb.Enabled
+    if bb.Enabled then
+        SendNotification("g", "Enabled", 3)
+    else
+        SendNotification("GGS", "Disabled", 3)
+    end
+end
+
+-- Connect the keybind to the ToggleBB function
+game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
+    if input.KeyCode == Enum.KeyCode[bb.Keybind] and not gameProcessedEvent then
+        ToggleBB()
+    end
+end)
+
+-- Set custom velocity
+game:GetService("RunService").heartbeat:Connect(function()
+    if bb.Enabled then
+        local vel = game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(bb.CustomX, bb.CustomY, bb.CustomZ)
+        game:GetService("RunService").RenderStepped:Wait()
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = vel
+    end
+end)
